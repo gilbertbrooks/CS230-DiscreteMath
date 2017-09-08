@@ -1,0 +1,34 @@
+(require racket/base)
+
+;;without tail-recursion
+(define multiply-2-helper
+  (lambda ((a <number>) (b <integer>) (result <number>))
+    (if (zero? b)
+	result
+	(multiply-2-helper a (- b 1) (+ result a)))))
+
+(define multiply-2
+  (lambda ((a <number>) (b <integer>))
+    (multiply-2-helper a b 0)))
+
+(define multiply
+  (lambda (( a <number>) (b <integer>))
+    (letrec ((iterate
+              (lambda ((c <integer>) (result <number>))
+                (cond ((zero? c) result)
+                      ((odd? c)
+                       (+ a (iterate (+ a result) (quotient c 2))))
+                       (else
+                        (iterate (+ a result) (quotient c 2)))))))
+       (iterate b 0))))
+
+
+
+(define multiply-2a
+  (lambda ((a <number>) (b <integer>))
+    (letrec ((iterate 
+              (lambda ((c <integer>) (result <number>))
+                (if (zero? c)
+                    result
+                    (iterate (- c 1) (+ result a))))))
+      (iterate b 0))))
